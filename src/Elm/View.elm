@@ -7,12 +7,15 @@ import Bootstrap.Form.InputGroup as InputGroup
 import Bootstrap.Grid as Grid
 import Bootstrap.Table as Table
 import Browser.Events exposing (onKeyDown)
+import Debug exposing (toString)
 import Elm.Messages as Msgs exposing (..)
 import Elm.Model exposing (BibleGateway, MainPoints, Model)
 import Hotkeys exposing (onEnter, onEnterSend, onKeyCode)
 import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
+import List.Extra as List
+import Result exposing (fromMaybe)
 
 
 view : Model -> Html Msg
@@ -114,17 +117,24 @@ bibleGatewayTable bibleGateway =
             let
                 passageList : List ( String, String ) -> List (Table.Row msg)
                 passageList l =
-                    case l of
-                        [] ->
-                            []
+                    l
+                        |> List.map
+                            (\elem ->
+                                l
+                                    |> List.elemIndex elem
+                                    |> Maybe.withDefault 99
+                                    |> (\e ->
+                                            if e /= 99 then
+                                                Table.tr []
+                                                    [ Table.td [] [ Html.text (toString (e + 1)) ]
+                                                    , Table.td [] [ Html.text (List.getAt e l |> Maybe.withDefault ( "N/A", "N/A" ) |> Tuple.first), Html.text " ", Html.text (List.getAt e l |> Maybe.withDefault ( "N/A", "N/A" ) |> Tuple.second) ]
+                                                    , Table.td [] [ Html.text "Icon" ]
+                                                    ]
 
-                        x :: xs ->
-                            Table.tr []
-                                [ Table.td [] [ Html.text "1" ]
-                                , Table.td [] [ Html.text (Tuple.first x), Html.text " ", Html.text (Tuple.second x) ]
-                                , Table.td [] [ Html.text "Icon" ]
-                                ]
-                                :: passageList xs
+                                            else
+                                                Table.tr [] []
+                                       )
+                            )
             in
             Table.tbody [ style "color" "white" ] (passageList bibleGateway.result)
         }

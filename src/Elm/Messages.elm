@@ -71,7 +71,7 @@ update msg model =
                     { url = model.bibleGateway.url
                     , passage = model.bibleGateway.passage
                     , version = model.bibleGateway.version
-                    , result = ( result.heading, result.passage ) :: model.bibleGateway.result
+                    , result = List.append model.bibleGateway.result [ ( result.heading, result.passage ) ]
                     }
               }
             , Cmd.none
