@@ -7,7 +7,9 @@ import Elm.Ports exposing (..)
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    recieveBibleGateway messageDecoder
+    Sub.batch
+        [ recieveBibleGateway messageDecoder
+        ]
 
 
 messageDecoder : { heading : String, passage : String } -> Msg

@@ -6,12 +6,8 @@ import Elm.Ports exposing (..)
 
 type Msg
     = NoOp
-      --| BibleGatewaySearch
-      --| SearchPassage String
     | BibleGateway BibleGatewayMsg
     | MainPoint MainPointMsg
-      -- | ChangeMainPoint String
-      -- | AddMainPoint
     | MyMsg { heading : String, passage : String }
 
 

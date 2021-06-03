@@ -6,16 +6,13 @@ import Bootstrap.Form.Input as Input
 import Bootstrap.Form.InputGroup as InputGroup
 import Bootstrap.Grid as Grid
 import Bootstrap.Table as Table
-import Browser.Events exposing (onKeyDown)
 import Debug exposing (toString)
 import Elm.Messages as Msgs exposing (..)
 import Elm.Model exposing (BibleGateway, MainPoints, Model)
-import Hotkeys exposing (onEnter, onEnterSend, onKeyCode)
 import Html exposing (Html)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import List.Extra as List
-import Result exposing (fromMaybe)
 
 
 view : Model -> Html Msg
@@ -23,15 +20,16 @@ view model =
     Grid.container []
         [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS
         , Grid.row []
-            [ Grid.col [] (mainPointsColumn model)
-            , Grid.col [] (bibleGatewayColumn model)
+            [ Grid.col [] (List.append (mainPointsColumn model) (bibleGatewayColumn model))
+            , Grid.col [] [ Html.h5 [] [ Html.text "Media Shout" ] ]
+            , Grid.col [] [ Html.h5 [] [ Html.text "vMix Inputs" ] ]
             ]
         ]
 
 
 mainPointsColumn : Model -> List (Html Msg)
 mainPointsColumn model =
-    [ Html.h1 [] [ Html.text "Main Points" ]
+    [ Html.h5 [] [ Html.text "Main Points" ]
     , InputGroup.config
         (InputGroup.text
             [ Input.id "main-points"
@@ -83,7 +81,7 @@ mainPointsTable mPoints =
 
 bibleGatewayColumn : Model -> List (Html Msg)
 bibleGatewayColumn model =
-    [ Html.h1 [] [ Html.text "Bible Gateway" ]
+    [ Html.h5 [] [ Html.text "Bible Gateway" ]
     , InputGroup.config
         (InputGroup.text
             [ Input.id "biblegateway-scripture"
